@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginLeft="15sp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/cloud4"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_border">
+
+            <!-- 搜索栏 -->
+            <EditText
+                android:id="@+id/editTextSearch"
+                android:layout_width="0dp"
+                android:layout_height="40sp"
+                android:layout_weight="1"
+                android:hint="请输入商品关键词"
+                android:layout_gravity="center"
+                android:padding="10sp"
+                android:inputType="text"
+                android:background="@null"/>
+
+            <ImageView
+                android:id="@+id/btnSearch"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginRight="10sp"
+                android:src="@mipmap/search"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15sp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_border">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:text="商品类别"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp">
+
+            <Button
+                android:id="@+id/book"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="二手书籍"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/material"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="资料笔记"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/electronic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="电子数码"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:paddingBottom="5sp">
+
+            <Button
+                android:id="@+id/cosmetic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="美容彩妆"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/equipment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="健身器材"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/others"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="其他"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="您可能对以下商品感兴趣"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <!-- 商品展示区域 -->
+    <GridLayout
+        android:id="@+id/gridLayoutProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:columnCount="3"
+        android:rowCount="3"
+        android:alignmentMode="alignMargins"
+        android:columnOrderPreserved="false">
+
+        <!-- 这里放置你的商品展示项 -->
+
+    </GridLayout>
+
+</LinearLayout>

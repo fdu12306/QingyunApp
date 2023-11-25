@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.example.qingyun.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
-    private EditText etPhone;
-    private ImageView clearPhone;
+    private EditText etStudentId;
+    private ImageView clearStudentId;
     private EditText etPassword;
     private ImageView clearPassword;
     private ImageView showPassword;
@@ -35,23 +35,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView(){
-        etPhone=findViewById(R.id.et_mobile);
-        clearPhone=findViewById(R.id.iv_clean_phone);
-        etPassword=findViewById(R.id.et_password);
-        clearPassword=findViewById(R.id.iv_clean_password);
-        showPassword=findViewById(R.id.iv_show_pwd);
-        btnLogin=findViewById(R.id.btn_login);
-        forgetPassword=findViewById(R.id.forget_password);
-        returnRegister=findViewById(R.id.register);
+        etStudentId=findViewById(R.id.etStudentId);
+        clearStudentId=findViewById(R.id.clearStudentId);
+        etPassword=findViewById(R.id.etPassword);
+        clearPassword=findViewById(R.id.clearPassword);
+        showPassword=findViewById(R.id.showPassword);
+        btnLogin=findViewById(R.id.login);
+        forgetPassword=findViewById(R.id.forgetPassword);
+        returnRegister=findViewById(R.id.returnRegister);
     }
 
     private void initListener() {
-        clearPhone.setOnClickListener(this);
+        clearStudentId.setOnClickListener(this);
         clearPassword.setOnClickListener(this);
         showPassword.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         returnRegister.setOnClickListener(this);
-        etPhone.addTextChangedListener(new TextWatcher() {
+        etStudentId.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -64,10 +64,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!TextUtils.isEmpty(editable) && clearPhone.getVisibility() == View.GONE) {
-                    clearPhone.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(editable) && clearStudentId.getVisibility() == View.GONE) {
+                    clearStudentId.setVisibility(View.VISIBLE);
                 } else if (TextUtils.isEmpty(editable)) {
-                    clearPhone.setVisibility(View.GONE);
+                    clearStudentId.setVisibility(View.GONE);
                 }
             }
         });
@@ -96,11 +96,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v){
         int viewId=v.getId();
-        if (viewId==R.id.iv_clean_phone) {
-            etPhone.setText("");
-        } else if (viewId==R.id.iv_clean_password) {
+        if (viewId==R.id.clearStudentId) {//清除学号
+            etStudentId.setText("");
+        } else if (viewId==R.id.clearPassword) {//清除密码
             etPassword.setText("");
-        } else if (viewId==R.id.iv_show_pwd) {
+        } else if (viewId==R.id.showPassword) {//显示密码
             if (etPassword.getInputType() != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
                 etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 showPassword.setImageResource(R.mipmap.pass_visuable);
@@ -112,9 +112,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (!TextUtils.isEmpty(pwd)) {
                 etPassword.setSelection(pwd.length());
             }
-        } else if (viewId==R.id.btn_login) {//登录
+        } else if (viewId==R.id.login) {//登录
 
-        } else if (viewId==R.id.register) {
+        } else if (viewId==R.id.returnRegister) {//返回注册
             finish();
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);

@@ -50,12 +50,12 @@
                     android:src="@mipmap/user" />
 
                 <EditText
-                    android:id="@+id/et_username"
+                    android:id="@+id/etStudentId"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/hint_username"
+                    android:hint="请输入学号"
                     android:inputType="textVisiblePassword"
                     android:maxLength="11"
                     android:singleLine="true"
@@ -65,7 +65,7 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_clean_username"
+                    android:id="@+id/clearStudentId"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -91,16 +91,16 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="15dp"
-                    android:src="@mipmap/phone" />
+                    android:src="@mipmap/password" />
 
                 <EditText
-                    android:id="@+id/et_mobile"
+                    android:id="@+id/etPassword"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/hint_phone"
-                    android:inputType="textVisiblePassword"
+                    android:hint="请输入密码"
+                    android:inputType="textPassword"
                     android:maxLength="11"
                     android:singleLine="true"
                     android:text=""
@@ -109,12 +109,19 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_clean_phone"
+                    android:id="@+id/clearPassword"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
                     android:src="@mipmap/ic_clear"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/showPassword"
+                    android:layout_width="30dp"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/pass_show" />
             </LinearLayout>
 
             <View
@@ -135,12 +142,12 @@
                     android:src="@mipmap/password" />
 
                 <EditText
-                    android:id="@+id/et_password"
+                    android:id="@+id/etConfirmPassword"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/hint_password"
+                    android:hint="请确认密码"
                     android:inputType="textPassword"
                     android:maxLength="30"
                     android:singleLine="true"
@@ -150,7 +157,7 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_clean_password"
+                    android:id="@+id/clearConfirmPassword"
                     android:layout_width="40dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -158,7 +165,7 @@
                     android:visibility="gone" />
 
                 <ImageView
-                    android:id="@+id/iv_show_pwd"
+                    android:id="@+id/showConfirmPassword"
                     android:layout_width="30dp"
                     android:layout_height="fill_parent"
                     android:scaleType="centerInside"
@@ -170,23 +177,23 @@
                 android:background="@color/color_eeeeee" />
 
             <Button
-                android:id="@+id/btn_register"
+                android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="21dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_btn_login_selected"
-                android:text="@string/register"
+                android:text="注册"
                 android:textColor="@color/color_ffffff"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/return_login"
+                android:id="@+id/returnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginBottom="10dp"
-                android:text="@string/returnLogin"
+                android:text="已有账号，返回登录"
                 android:textColor="@color/color_b0b8b2"
                 android:textSize="14sp" />
 
@@ -207,7 +214,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="@string/contactService"
+            android:text="联系客服"
             android:textColor="@color/color_b0b8b2"
             android:textSize="14sp" />
         <View
@@ -220,7 +227,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="@string/aboutUs"
+            android:text="关于我们"
             android:textColor="@color/color_b0b8b2"
             android:textSize="14sp"
             tools:ignore="RtlHardcoded" />

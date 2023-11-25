@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_options">
+        <item>请选择商品类别</item>
+        <item>二手图书</item>
+        <item>笔记资料</item>
+        <item>电子数码</item>
+        <item>美容彩妆</item>
+        <item>健身器材</item>
+        <item>其他</item>
+        <!-- 添加其他商品类别 -->
+    </string-array>
+
+    <string-array name="campus_options">
+        <item>请选择校区</item>
+        <item>邯郸校区</item>
+        <item>江湾校区</item>
+        <item>枫林校区</item>
+        <item>张江校区</item>
+    </string-array>
+</resources>

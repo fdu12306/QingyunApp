@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.PublishFragment">
+
+    <ImageView
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_gravity="center"
+        android:src="@drawable/cloud1"
+        android:layout_marginBottom="15sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_border"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp">
+
+        <!-- 商品描述输入框 -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="180sp"
+            android:hint="请填写商品描述以便于他人能够更好地了解您要发布的商品"
+            android:background="@null"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:padding="10sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10sp">
+
+            <!-- 已选择的图片 -->
+            <ImageView
+                android:id="@+id/imageViewSelected"
+                android:layout_width="80sp"
+                android:src="@mipmap/test"
+                android:layout_height="80sp"
+                android:scaleType="centerCrop"/>
+
+            <!-- 添加商品图片按钮 -->
+            <Button
+                android:id="@+id/btnAddImage"
+                android:background="@color/grey"
+                android:layout_width="80sp"
+                android:layout_height="80sp"
+                android:text="+添加商品图片" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <!-- 校区选择下拉框 -->
+
+    <!-- 商品类别选择下拉框 -->
+    <Spinner
+        android:id="@+id/spinnerCampus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:entries="@array/campus_options"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"/>
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/category_options"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="15sp"/>
+
+
+    <!-- 价格输入框 -->
+    <EditText
+        android:id="@+id/editTextPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入您意向的价格"
+        android:inputType="numberDecimal"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="15sp"/>
+
+    <!-- 发布按钮 -->
+    <Button
+        android:id="@+id/btnPublish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发布"
+        android:textSize="20sp"
+        android:layout_marginLeft="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="30sp"/>
+
+
+
+</LinearLayout>
