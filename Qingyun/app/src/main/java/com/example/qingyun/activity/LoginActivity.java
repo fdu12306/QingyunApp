@@ -2,7 +2,9 @@ package com.example.qingyun.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -150,6 +152,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String message = jsonResponse.getString("message");
                             int state=jsonResponse.getInt("state");
                             if(state==200){
+                                // 登录成功，获取服务器返回的 Cookie
+                                Header[] responseHeaders = headers;
+                                for (Header header : responseHeaders) {
+                                    if (header.getName().equals("Set-Cookie")) {
+                                        // 解析并保存服务器返回的 Cookie
+                                        String cookieValue = header.getValue();
+                                        // 将 cookieValue 存储到 SharedPreferences 中
+                                        saveCookieToSharedPreferences(cookieValue);
+                                    }
+                                }
                                 finish();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -178,5 +190,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }else if(viewId==R.id.forgetPassword) {//忘记密码
             Toast.makeText(LoginActivity.this, "请联系系统管理员", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // 自定义方法，将 Cookie 存储到 SharedPreferences
+    private void saveCookieToSharedPreferences(String cookieValue) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyCookiePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("my_cookie_key", cookieValue);
+        editor.apply();
     }
 }

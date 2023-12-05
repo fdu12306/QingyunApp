@@ -1,6 +1,8 @@
 package com.example.qingyun.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -54,6 +56,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button exit;
 
     private static final String checkLoginUrl= AppConfig.BaseUrl+"/checkLogin.php";
+    private static final String logoutUrl=AppConfig.BaseUrl+"/logout.php";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -136,15 +139,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     public void initDisplay(){
+
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
         RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
+        // 在后续的请求中，从 SharedPreferences 中读取 Cookie，并将其添加到请求头中
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
         asyncHttpClient.get(checkLoginUrl, requestParams, new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 // 将 byte 数组转换为字符串
                 String responseString = new String(responseBody);
-                Log.d("Response", responseString); // 添加日志
                 try {
                     JSONObject jsonResponse = new JSONObject(responseString);
                     Boolean logged_in=jsonResponse.getBoolean("logged");
@@ -202,7 +208,56 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
        } else if (viewId==R.id.order) {//已下单
 
        } else if (viewId==R.id.exit) {//退出登录
+           AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
+           RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
+           String myCookie = loadCookieFromSharedPreferences();
+           asyncHttpClient.addHeader("Cookie", myCookie);
+           asyncHttpClient.get(logoutUrl, requestParams, new AsyncHttpResponseHandler() {
+               @Override
+               public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                   // 将 byte 数组转换为字符串
+                   String responseString = new String(responseBody);
+                   try {
+                       JSONObject jsonResponse = new JSONObject(responseString);
+                       Boolean loggedout=jsonResponse.getBoolean("loggedout");
+                       if(loggedout) {
+                           welcom.setText("欢迎你");
+                           welcom.setVisibility(View.GONE);
+                           loginBtn.setVisibility(View.VISIBLE);
+                           div.setVisibility(View.VISIBLE);
+                           registerBtn.setVisibility(View.VISIBLE);
+                           exit.setVisibility(View.GONE);
+                           deleteCookieFromSharedPreferences();
+                       }else {
+                           Toast.makeText(getActivity(), "退出登录失败", Toast.LENGTH_SHORT).show();
+                       }
+                   } catch (JSONException e) {
+                       e.printStackTrace();
+                       // JSON 解析失败，可以在这里处理异常
+                       Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                   }
+               }
 
+               @Override
+               public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                   Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+               }
+           });
        }
     }
+
+    // 自定义方法，从 SharedPreferences 中加载 Cookie
+    private String loadCookieFromSharedPreferences() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyCookiePreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("my_cookie_key", "");
+    }
+
+    //删除cookie
+    private void deleteCookieFromSharedPreferences() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyCookiePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("my_cookie_key"); // 删除名为 "my_cookie_key" 的 cookie
+        editor.apply(); // 提交更改
+    }
+
 }

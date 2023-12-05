@@ -25,7 +25,7 @@
             android:id="@+id/welcome"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="欢迎你，卿云!"
+            android:text="欢迎你"
             android:layout_marginLeft="30sp"
             android:textSize="20sp"
             android:textColor="#000000"
