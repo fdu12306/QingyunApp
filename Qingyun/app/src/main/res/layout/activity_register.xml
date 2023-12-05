@@ -50,13 +50,56 @@
                     android:src="@mipmap/user" />
 
                 <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请输入用户名"
+                    android:inputType="textVisiblePassword"
+                    android:maxLength="11"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/color_999999"
+                    android:textColorHint="@color/color_999999"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/clearUsername"
+                    android:layout_width="40dp"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_clear"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_eeeeee" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@mipmap/id" />
+
+                <EditText
                     android:id="@+id/etStudentId"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="请输入学号"
-                    android:inputType="textVisiblePassword"
+                    android:inputType="numberDecimal"
                     android:maxLength="11"
                     android:singleLine="true"
                     android:text=""

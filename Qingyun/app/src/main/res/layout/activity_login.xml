@@ -50,7 +50,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="15dp"
-                    android:src="@mipmap/user" />
+                    android:src="@mipmap/id" />
 
                 <EditText
                     android:id="@+id/etStudentId"
