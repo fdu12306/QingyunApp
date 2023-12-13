@@ -1,19 +1,41 @@
 package com.example.qingyun.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.qingyun.R;
+import com.example.qingyun.adapter.ProductAdapter;
+import com.example.qingyun.bean.Product;
+import com.example.qingyun.utils.AppConfig;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,11 +46,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private EditText editTextSearch;
     private ImageView btnSearch;
     private Button book;
-    private Button material;
+    private Button study;
     private Button electronic;
     private Button cosmetic;
+    private Button sports;
     private Button equipment;
+    private Button medical;
+    private Button food;
     private Button others;
+
+    private RecyclerView recyclerViewProducts;
+    private static List<Product> productList;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,11 +106,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         editTextSearch=view.findViewById(R.id.editTextSearch);
         btnSearch=view.findViewById(R.id.btnSearch);
         book=view.findViewById(R.id.book);
-        material=view.findViewById(R.id.material);
+        study=view.findViewById(R.id.study);
         electronic=view.findViewById(R.id.electronic);
         cosmetic=view.findViewById(R.id.cosmetic);
+        sports=view.findViewById(R.id.sports);
         equipment=view.findViewById(R.id.equipment);
+        medical=view.findViewById(R.id.medical);
+        food=view.findViewById(R.id.food);
         others=view.findViewById(R.id.others);
+        recyclerViewProducts=view.findViewById(R.id.recyclerViewProducts);
         return view;
     }
 
@@ -89,16 +122,79 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initListener();
+        loadProductData();
     }
 
     private void initListener() {
         btnSearch.setOnClickListener(this);
         book.setOnClickListener(this);
-        material.setOnClickListener(this);
+        study.setOnClickListener(this);
         electronic.setOnClickListener(this);
         cosmetic.setOnClickListener(this);
+        sports.setOnClickListener(this);
         equipment.setOnClickListener(this);
+        medical.setOnClickListener(this);
+        food.setOnClickListener(this);
         others.setOnClickListener(this);
+    }
+
+    // 自定义方法，从 SharedPreferences 中加载 Cookie
+    private String loadCookieFromSharedPreferences() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyCookiePreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("my_cookie_key", "");
+    }
+
+    private void loadProductData(){
+        productList=new ArrayList<>();
+        String getProductUrl= AppConfig.BaseUrl+"/getNewestProducts.php";
+        AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getProductUrl, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    if(jsonResponse.has("data")){
+                        JSONArray dataArray=jsonResponse.getJSONArray("data");
+                        for(int i=0;i<dataArray.length();i++){
+                            JSONObject item=dataArray.getJSONObject(i);
+                            int id=item.getInt("id");
+                            String productName=item.getString("productName");
+                            double price=item.getDouble("price");
+                            String imagePath=item.getString("imagePath");
+                            Product product=new Product(id,productName,price,imagePath);
+                            product.setId(id);
+                            product.setProductName(productName);
+                            product.setPrice(price);
+                            product.setImagePath(imagePath);
+                            productList.add(product);
+                        }
+                        // 数据加载完成后初始化适配器并设置给 recyclerViewProducts
+                        // Create the adapter and set it to recyclerViewProducts
+                        ProductAdapter productAdapter = new ProductAdapter(productList,requireContext());
+
+                        // Set up GridLayoutManager with spanCount 3
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+                        recyclerViewProducts.setLayoutManager(gridLayoutManager);
+
+                        recyclerViewProducts.setAdapter(productAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -106,18 +202,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         int viewId=v.getId();
         if(viewId==R.id.btnSearch){//搜索
 
-        } else if (viewId==R.id.book) {//二手图书
+        } else if (viewId==R.id.book) {//图书资料
 
-        }else if (viewId==R.id.material) {//资料笔记
+        }else if (viewId==R.id.study) {//学习办公
 
         }else if (viewId==R.id.electronic) {//电子数码
 
         }else if (viewId==R.id.cosmetic) {//美容妆造
 
-        }else if (viewId==R.id.equipment) {//健身器材
+        } else if (viewId==R.id.sports) {//运动健身
 
-        }else if (viewId==R.id.others) {//其他
+        } else if (viewId==R.id.equipment) {//装备器材
+
+        } else if (viewId==R.id.medical) {//医疗保健
+
+        } else if (viewId==R.id.food) {//食品饮料
+
+        } else if (viewId==R.id.others) {//其他
 
         }
     }
+
+
 }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ProductDetailsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:layout_marginTop="5dp"
+        android:text="商品详情"/>
+
+    <ImageView
+        android:id="@+id/imageViewProduct"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/placeholder_image" />
+
+    <TextView
+        android:id="@+id/textViewProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <!-- 商品价格 -->
+    <TextView
+        android:id="@+id/textViewProductPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/textViewCampus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <!-- 商品类别 -->
+    <TextView
+        android:id="@+id/textViewProductCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <!-- 商品描述 -->
+    <TextView
+        android:id="@+id/textViewProductDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <!-- 发布时间 -->
+    <TextView
+        android:id="@+id/textViewProductPublishTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+    <!-- 商品状态 -->
+    <TextView
+        android:id="@+id/textViewProductStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="10dp" />
+
+</LinearLayout>

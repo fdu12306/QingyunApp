@@ -1,12 +1,12 @@
 package com.example.qingyun.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +16,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.qingyun.utils.AppConfig;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -28,9 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.qingyun.R;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.qingyun.utils.AppConfig;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,15 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cz.msebera.android.httpclient.Header;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -166,7 +153,11 @@ public class PublishFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
+    // 自定义方法，从 SharedPreferences 中加载 Cookie
+    private String loadCookieFromSharedPreferences() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyCookiePreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("my_cookie_key", "");
+    }
 
     @Override
     public void onClick(View v){
@@ -202,15 +193,17 @@ public class PublishFragment extends Fragment implements View.OnClickListener{
                 // 将selectedImageUri中的图片数据转换为字节数组
                 byte[] imageBytes = getImageBytesFromUri(selectedImageUri);
                 RequestParams requestParams = new RequestParams();
-                requestParams.put("name",productName);
+                requestParams.put("productName",productName);
                 requestParams.put("description",description);
-                requestParams.put("selectedCampus",selectedCampus);
-                requestParams.put("selectedCategory",selectedCategory);
+                requestParams.put("campus",selectedCampus);
+                requestParams.put("category",selectedCategory);
                 requestParams.put("price",price);
                 // 添加图片数据到RequestParams
                 requestParams.put("image", new ByteArrayInputStream(imageBytes), "image.jpg");
                 String url  = AppConfig.BaseUrl+"/issue.php";
                 AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+                String myCookie = loadCookieFromSharedPreferences();
+                asyncHttpClient.addHeader("Cookie", myCookie);
                 asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

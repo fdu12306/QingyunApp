@@ -2,11 +2,14 @@
 <resources>
     <string-array name="category_options">
         <item>请选择商品类别</item>
-        <item>二手图书</item>
-        <item>笔记资料</item>
+        <item>图书资料</item>
+        <item>学习办公</item>
         <item>电子数码</item>
         <item>美容彩妆</item>
-        <item>健身器材</item>
+        <item>运动健身</item>
+        <item>装备器材</item>
+        <item>医疗保健</item>
+        <item>食品饮料</item>
         <item>其他</item>
         <!-- 添加其他商品类别 -->
     </string-array>
