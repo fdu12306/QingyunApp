@@ -1,6 +1,7 @@
 package com.example.qingyun.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.qingyun.R;
+import com.example.qingyun.activity.CategoryActivity;
 import com.example.qingyun.adapter.ProductAdapter;
 import com.example.qingyun.bean.Product;
 import com.example.qingyun.utils.AppConfig;
@@ -202,26 +204,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         int viewId=v.getId();
         if(viewId==R.id.btnSearch){//搜索
 
-        } else if (viewId==R.id.book) {//图书资料
-
-        }else if (viewId==R.id.study) {//学习办公
-
-        }else if (viewId==R.id.electronic) {//电子数码
-
-        }else if (viewId==R.id.cosmetic) {//美容妆造
-
-        } else if (viewId==R.id.sports) {//运动健身
-
-        } else if (viewId==R.id.equipment) {//装备器材
-
-        } else if (viewId==R.id.medical) {//医疗保健
-
-        } else if (viewId==R.id.food) {//食品饮料
-
-        } else if (viewId==R.id.others) {//其他
-
+        } else {
+            // 处理类别按钮点击
+            String category = getCategoryFromButtonId(viewId);
+            startCategoryActivity(category);
         }
+
     }
 
+    private String getCategoryFromButtonId(Integer viewId){
+        String category = "";
+        if (viewId==R.id.book) {//图书资料
+            category="图书资料";
+        }else if (viewId==R.id.study) {//学习办公
+            category="学习办公";
+        }else if (viewId==R.id.electronic) {//电子数码
+            category="电子数码";
+        }else if (viewId==R.id.cosmetic) {//美容妆造
+            category="美容彩妆";
+        } else if (viewId==R.id.sports) {//运动健身
+            category="运动健身";
+        } else if (viewId==R.id.equipment) {//装备器材
+            category="装备器材";
+        } else if (viewId==R.id.medical) {//医疗保健
+            category="医疗保健";
+        } else if (viewId==R.id.food) {//食品饮料
+            category="食品饮料";
+        } else if (viewId==R.id.others) {//其他
+            category="其他";
+        }
+        return category;
+    }
+
+    private void startCategoryActivity(String category) {
+        // 创建 Intent 对象，传递类别信息
+        Intent intent = new Intent(requireContext(), CategoryActivity.class);
+        intent.putExtra("category", category);
+        // 启动 CategoryActivity
+        startActivity(intent);
+    }
 
 }
