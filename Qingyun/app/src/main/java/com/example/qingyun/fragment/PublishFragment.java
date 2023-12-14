@@ -55,6 +55,7 @@ public class PublishFragment extends Fragment implements View.OnClickListener{
 
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private Uri selectedImageUri;
+    private static final String issueUrl  = AppConfig.BaseUrl+"/issue.php";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -200,11 +201,11 @@ public class PublishFragment extends Fragment implements View.OnClickListener{
                 requestParams.put("price",price);
                 // 添加图片数据到RequestParams
                 requestParams.put("image", new ByteArrayInputStream(imageBytes), "image.jpg");
-                String url  = AppConfig.BaseUrl+"/issue.php";
+
                 AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
                 String myCookie = loadCookieFromSharedPreferences();
                 asyncHttpClient.addHeader("Cookie", myCookie);
-                asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {
+                asyncHttpClient.post(issueUrl, requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         // 将 byte 数组转换为字符串

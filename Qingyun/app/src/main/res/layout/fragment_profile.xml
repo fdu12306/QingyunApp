@@ -136,7 +136,7 @@
             <Button
                 android:id="@+id/order"
                 android:background="#ffffff"
-                android:text="0\n我下单的"
+                android:text="0\n我购买的"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.qingyun.R;
 import com.example.qingyun.activity.CategoryActivity;
+import com.example.qingyun.activity.SearchActivity;
 import com.example.qingyun.adapter.ProductAdapter;
 import com.example.qingyun.bean.Product;
 import com.example.qingyun.utils.AppConfig;
@@ -203,7 +204,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v){
         int viewId=v.getId();
         if(viewId==R.id.btnSearch){//搜索
-
+            String input=editTextSearch.getText().toString().trim();
+            if(input.isEmpty()){
+                Toast.makeText(getActivity(), "请输入您要搜索的关键词", Toast.LENGTH_SHORT).show();
+            }else {
+                startSearchActivity(input);
+            }
         } else {
             // 处理类别按钮点击
             String category = getCategoryFromButtonId(viewId);
@@ -241,6 +247,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Intent intent = new Intent(requireContext(), CategoryActivity.class);
         intent.putExtra("category", category);
         // 启动 CategoryActivity
+        startActivity(intent);
+    }
+
+    private void startSearchActivity(String input){
+        // 创建 Intent 对象，传递搜索内容信息
+        Intent intent = new Intent(requireContext(), SearchActivity.class);
+        intent.putExtra("input", input);
         startActivity(intent);
     }
 

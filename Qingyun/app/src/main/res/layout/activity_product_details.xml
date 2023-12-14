@@ -79,4 +79,28 @@
         android:layout_marginTop="5dp"
         android:padding="10dp" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+        <!-- 添加收藏按钮 -->
+        <Button
+            android:id="@+id/buttonAddToWishlist"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="65dp"
+            android:text="收藏" />
+
+        <!-- 添加购买按钮 -->
+        <Button
+            android:id="@+id/buttonBuyNow"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="65dp"
+            android:text="购买" />
+    </RelativeLayout>
+
 </LinearLayout>
