@@ -10,9 +10,8 @@ public class Product {
     private String category;
     private Double price;
     private String description;
-    private LocalDateTime issueTime;
-    private LocalDateTime soldTime;
-    private LocalDateTime fixTime;
+    private String issueTime;
+    private String soldTime;
     private String imagePath;
     private Integer soldState;
     private Double priceThreshold;
@@ -22,6 +21,14 @@ public class Product {
         this.productName=productName;
         this.price=price;
         this.imagePath=imagePath;
+    }
+
+    public Product(Integer id,String productName,Double price,String imagePath,String soldTime){
+        this.id=id;
+        this.productName=productName;
+        this.price=price;
+        this.imagePath=imagePath;
+        this.soldTime=soldTime;
     }
 
     public Product(Integer id,String productName,Double price,String imagePath,Double priceThreshold){
@@ -88,28 +95,21 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDateTime getIssueTime() {
+
+    public String getIssueTime() {
         return issueTime;
     }
 
-    public void setIssueTime(LocalDateTime issueTime) {
+    public void setIssueTime(String issueTime) {
         this.issueTime = issueTime;
     }
 
-    public LocalDateTime getSoldTime() {
+    public String getSoldTime() {
         return soldTime;
     }
 
-    public void setSoldTime(LocalDateTime soldTime) {
+    public void setSoldTime(String soldTime) {
         this.soldTime = soldTime;
-    }
-
-    public LocalDateTime getFixTime() {
-        return fixTime;
-    }
-
-    public void setFixTime(LocalDateTime fixTime) {
-        this.fixTime = fixTime;
     }
 
     public String getImagePath() {

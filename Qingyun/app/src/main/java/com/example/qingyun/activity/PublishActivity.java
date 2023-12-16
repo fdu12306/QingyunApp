@@ -8,12 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qingyun.R;
 import com.example.qingyun.adapter.CollectAdapter;
-import com.example.qingyun.adapter.ProductAdapter;
+import com.example.qingyun.adapter.PublishAdapter;
 import com.example.qingyun.bean.Product;
 import com.example.qingyun.decoration.VerticalSpaceItemDecoration;
 import com.example.qingyun.utils.AppConfig;
@@ -30,32 +29,27 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class CollectActivity extends AppCompatActivity {
+public class PublishActivity extends AppCompatActivity {
+    private RecyclerView recyclerViewPublishProducts;
 
-    private RecyclerView recyclerViewCollectProducts;
-
-    private static final String getCollectUrl= AppConfig.BaseUrl+"/getCollect.php";
+    private static final String getIssueUrl= AppConfig.BaseUrl+"/getIssue.php";
     private static List<Product> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collect);
-        initView();
-        loadCollectProduct();
+        setContentView(R.layout.activity_publish);
+        recyclerViewPublishProducts=findViewById(R.id.recyclerViewPublishProducts);
+        loadIssueProduct();
     }
 
-    private void initView(){
-        recyclerViewCollectProducts=findViewById(R.id.recyclerViewCollectProducts);
-    }
-
-    private void loadCollectProduct(){
+    private void loadIssueProduct(){
         productList=new ArrayList<>();
         AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
         String myCookie = loadCookieFromSharedPreferences();
         asyncHttpClient.addHeader("Cookie", myCookie);
         RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
-        asyncHttpClient.get(getCollectUrl, requestParams, new AsyncHttpResponseHandler() {
+        asyncHttpClient.get(getIssueUrl, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 // 将 byte 数组转换为字符串
@@ -70,34 +64,33 @@ public class CollectActivity extends AppCompatActivity {
                             String productName=item.getString("productName");
                             double price=item.getDouble("price");
                             String imagePath=item.getString("imagePath");
-                            double priceThreshold=item.getDouble("priceThreshold");
-                            Product product=new Product(id,productName,price,imagePath,priceThreshold);
+                            Product product=new Product(id,productName,price,imagePath);
                             productList.add(product);
                         }
                         // 数据加载完成后初始化适配器并设置给 recyclerViewProducts
-                        CollectAdapter collectAdapter = new CollectAdapter(productList,CollectActivity.this);
-                        // Set up GridLayoutManager with spanCount 1
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(CollectActivity.this, 1);
+                        PublishAdapter publishAdapter = new PublishAdapter(productList,PublishActivity.this);
+//                        // Set up GridLayoutManager with spanCount 1
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(PublishActivity.this, 1);
                         int verticalSpacingInPixels = 10;
-                        recyclerViewCollectProducts.addItemDecoration(new VerticalSpaceItemDecoration(verticalSpacingInPixels));
-                        recyclerViewCollectProducts.setLayoutManager(gridLayoutManager);
-                        recyclerViewCollectProducts.setAdapter(collectAdapter);
+                        recyclerViewPublishProducts.addItemDecoration(new VerticalSpaceItemDecoration(verticalSpacingInPixels));
+                        recyclerViewPublishProducts.setLayoutManager(gridLayoutManager);
+                        recyclerViewPublishProducts.setAdapter(publishAdapter);
                     }
                     else{
                         String message = jsonResponse.getString("message");
                         // 在 Toast 中显示成功消息
-                        Toast.makeText(CollectActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PublishActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // JSON 解析失败，可以在这里处理异常
-                    Toast.makeText(CollectActivity.this, "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublishActivity.this, "JSON 解析失败", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(CollectActivity.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PublishActivity.this, "网络连接失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

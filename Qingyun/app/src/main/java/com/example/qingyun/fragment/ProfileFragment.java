@@ -4,16 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.qingyun.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.qingyun.R;
-import com.example.qingyun.activity.CategoryActivity;
 import com.example.qingyun.activity.CollectActivity;
 import com.example.qingyun.activity.LoginActivity;
+import com.example.qingyun.activity.OrderActivity;
+import com.example.qingyun.activity.PublishActivity;
 import com.example.qingyun.activity.RegisterActivity;
+import com.example.qingyun.activity.SoldActivity;
 import com.example.qingyun.utils.AppConfig;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -56,9 +51,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button sold;
     private Button order;
     private Button exit;
-
     private static final String checkLoginUrl= AppConfig.BaseUrl+"/checkLogin.php";
     private static final String logoutUrl=AppConfig.BaseUrl+"/logout.php";
+    private static final String getCollectNumUrl=AppConfig.BaseUrl+"/getCollectNum.php";
+    private static final String getIssueNumUrl=AppConfig.BaseUrl+"/getIssueNum.php";
+    private static final String getSoldNumUrl=AppConfig.BaseUrl+"/getSoldNum.php";
+    private static final String getOrderNumUrl=AppConfig.BaseUrl+"/getOrderNum.php";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -117,7 +115,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         sold=view.findViewById(R.id.sold);
         order=view.findViewById(R.id.order);
         exit=view.findViewById(R.id.exit);
-        initDisplay();
+        initLogDisplay();
+        initCollectDisplay();
+        initIssueDisplay();
+        initSoldDisplay();
+        initOrderDisplay();
         return view;
     }
 
@@ -140,7 +142,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         exit.setOnClickListener(this);
     }
 
-    public void initDisplay(){
+    private void initLogDisplay(){
 
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
         RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
@@ -186,6 +188,121 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    private void initCollectDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getCollectNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    collect.setText(num+"\n收藏");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initIssueDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getIssueNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    issue.setText(num+"\n我发布的");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initSoldDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getSoldNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    sold.setText(num+"\n我卖出的");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void initOrderDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getOrderNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    order.setText(num+"\n我购买的");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public void onClick(View v){
         int viewId=v.getId();
@@ -205,11 +322,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
        } else if (viewId==R.id.comment) {//评论
 
        } else if (viewId==R.id.issue) {//发布
-
+           Intent intent = new Intent(requireContext(), PublishActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.sold) {//已卖出
-
+           Intent intent = new Intent(requireContext(), SoldActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.order) {//已下单
-
+           Intent intent = new Intent(requireContext(), OrderActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.exit) {//退出登录
            AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
            RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
