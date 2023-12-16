@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import com.example.qingyun.MainActivity;
 import com.example.qingyun.R;
+import com.example.qingyun.activity.CategoryActivity;
+import com.example.qingyun.activity.CollectActivity;
 import com.example.qingyun.activity.LoginActivity;
 import com.example.qingyun.activity.RegisterActivity;
 import com.example.qingyun.utils.AppConfig;
@@ -43,7 +45,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener{
     private ImageView avatar;
-    private TextView welcom;
+    private TextView welcome;
     private Button loginBtn;
     private TextView div;
     private Button registerBtn;
@@ -104,7 +106,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_profile, container, false);
         avatar=view.findViewById(R.id.avatar);
-        welcom=view.findViewById(R.id.welcome);
+        welcome=view.findViewById(R.id.welcome);
         loginBtn=view.findViewById(R.id.login);
         div=view.findViewById(R.id.div);
         registerBtn=view.findViewById(R.id.register);
@@ -156,14 +158,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     Boolean logged_in=jsonResponse.getBoolean("logged");
                     if(logged_in) {
                         String username=jsonResponse.getString("username");
-                        welcom.setText("欢迎你，"+username+"!");
-                        welcom.setVisibility(View.VISIBLE);
+                        welcome.setText("欢迎你，"+username+"!");
+                        welcome.setVisibility(View.VISIBLE);
                         loginBtn.setVisibility(View.GONE);
                         div.setVisibility(View.GONE);
                         registerBtn.setVisibility(View.GONE);
                         exit.setVisibility(View.VISIBLE);
                     }else {
-                        welcom.setVisibility(View.GONE);
+                        welcome.setVisibility(View.GONE);
                         loginBtn.setVisibility(View.VISIBLE);
                         div.setVisibility(View.VISIBLE);
                         registerBtn.setVisibility(View.VISIBLE);
@@ -196,7 +198,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
            Intent intent = new Intent(getActivity(), RegisterActivity.class);
            startActivity(intent);
        } else if (viewId==R.id.collect) {//收藏
-
+           Intent intent = new Intent(requireContext(), CollectActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.browser) {//浏览
 
        } else if (viewId==R.id.comment) {//评论
@@ -221,8 +224,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                        JSONObject jsonResponse = new JSONObject(responseString);
                        Boolean loggedout=jsonResponse.getBoolean("loggedout");
                        if(loggedout) {
-                           welcom.setText("欢迎你");
-                           welcom.setVisibility(View.GONE);
+                           welcome.setText("欢迎你");
+                           welcome.setVisibility(View.GONE);
                            loginBtn.setVisibility(View.VISIBLE);
                            div.setVisibility(View.VISIBLE);
                            registerBtn.setVisibility(View.VISIBLE);

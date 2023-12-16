@@ -15,12 +15,21 @@ public class Product {
     private LocalDateTime fixTime;
     private String imagePath;
     private Integer soldState;
+    private Double priceThreshold;
 
     public Product(Integer id,String productName,Double price,String imagePath){
         this.id=id;
         this.productName=productName;
         this.price=price;
         this.imagePath=imagePath;
+    }
+
+    public Product(Integer id,String productName,Double price,String imagePath,Double priceThreshold){
+        this.id=id;
+        this.productName=productName;
+        this.price=price;
+        this.imagePath=imagePath;
+        this.priceThreshold=priceThreshold;
     }
 
     public Integer getId() {
@@ -117,5 +126,13 @@ public class Product {
 
     public void setSoldState(Integer soldState) {
         this.soldState = soldState;
+    }
+
+    public Double getPriceThreshold() {
+        return priceThreshold;
+    }
+
+    public void setPriceThreshold(Double priceThreshold) {
+        this.priceThreshold = priceThreshold;
     }
 }
