@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private RecyclerView recyclerViewProducts;
     private static List<Product> productList;
-
+    private static final String getProductUrl= AppConfig.BaseUrl+"/getNewestProducts.php";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -149,7 +149,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void loadProductData(){
         productList=new ArrayList<>();
-        String getProductUrl= AppConfig.BaseUrl+"/getNewestProducts.php";
         AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
         RequestParams requestParams = new RequestParams(); // 如果有查询参数，可以在这里添加
         String myCookie = loadCookieFromSharedPreferences();

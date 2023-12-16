@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/rounded_border">
+
+    <TextView
+        android:id="@+id/textViewMessageTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="消息时间"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewMessageRead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:text="是否已读"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewMessageContent"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:text="消息内容"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+        <!-- 添加删除按钮 -->
+        <Button
+            android:id="@+id/buttonIsRead"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="30dp"
+            android:textSize="10sp"
+            android:text="标记已读" />
+
+        <!-- 添加修改按钮 -->
+        <Button
+            android:id="@+id/buttonDeleteMessage"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:textSize="10sp"
+            android:text="删除消息" />
+
+    </RelativeLayout>
+
+</LinearLayout>
