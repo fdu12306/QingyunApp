@@ -1,29 +1,35 @@
 package com.example.qingyun.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.qingyun.R;
+import com.example.qingyun.adapter.ProductCommentAdapter;
+import com.example.qingyun.bean.Comment;
+import com.example.qingyun.decoration.VerticalSpaceItemDecoration;
 import com.example.qingyun.utils.AppConfig;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,9 +47,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     private TextView textViewSoldState;
     private Button buttonAddToWishlist;
     private Button buttonBuyNow;
+    private EditText editTextComment;
+    private Button buttonSubmitComment;
+    private RecyclerView recyclerViewComments;
     private Integer id;
+    private List<Comment> commentList;
     private static final String collectUrl  = AppConfig.BaseUrl+"/collect.php";
     private static final String orderUrl  = AppConfig.BaseUrl+"/order.php";
+    private static final String issueCommentUrl=AppConfig.BaseUrl+"/issueComment.php";
+    private static final String getCommentUrl=AppConfig.BaseUrl+"/getComment.php";
+    private static final String addVisitRecorderUrl=AppConfig.BaseUrl+"/addVisitRecorder.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +66,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         int productId = getIntent().getIntExtra("productId", -1);
         this.id=productId;
         fetchProductDetails(productId);
+        loadCommentData();
+        addVisitRecorder();
     }
 
     private void initView(){
@@ -67,11 +82,35 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         textViewSoldState = findViewById(R.id.textViewProductStatus);
         buttonAddToWishlist=findViewById(R.id.buttonAddToWishlist);
         buttonBuyNow=findViewById(R.id.buttonBuyNow);
+        editTextComment=findViewById(R.id.editTextComment);
+        buttonSubmitComment=findViewById(R.id.buttonSubmitComment);
+        recyclerViewComments=findViewById(R.id.recyclerViewComments);
     }
 
     private void initListener(){
         buttonAddToWishlist.setOnClickListener(this);
         buttonBuyNow.setOnClickListener(this);
+        buttonSubmitComment.setOnClickListener(this);
+    }
+
+    private void addVisitRecorder(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("productId", id);
+        asyncHttpClient.post(addVisitRecorderUrl, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                // 处理失败的情况
+                Toast.makeText(ProductDetailsActivity.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchProductDetails(int productId) {
@@ -132,6 +171,46 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             operate(collectUrl);
         } else if (viewId==R.id.buttonBuyNow) {//购买
             operate(orderUrl);
+        } else if(viewId==R.id.buttonSubmitComment){//发布评论
+            issueComment();
+        }
+    }
+
+    private void issueComment(){
+        String comment=editTextComment.getText().toString().trim();
+        if(comment.isEmpty()){
+            Toast.makeText(ProductDetailsActivity.this, "您输入的评论为空", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            RequestParams requestParams = new RequestParams();
+            requestParams.put("productId",this.id);
+            requestParams.put("content",comment);
+            AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+            String myCookie = loadCookieFromSharedPreferences();
+            asyncHttpClient.addHeader("Cookie", myCookie);
+            asyncHttpClient.post(issueCommentUrl, requestParams, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    // 将 byte 数组转换为字符串
+                    String responseString = new String(responseBody);
+                    try {
+                        // 解析字符串为 JSON 对象
+                        JSONObject jsonResponse = new JSONObject(responseString);
+                        // 在此处处理 jsonResponse，根据后端返回的数据结构进行操作
+                        String message = jsonResponse.getString("message");
+                        // 在 Toast 中显示成功或失败消息
+                        Toast.makeText(ProductDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        // JSON 解析失败，可以在这里处理异常
+                        Toast.makeText(ProductDetailsActivity.this, "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Toast.makeText(ProductDetailsActivity.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -152,7 +231,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 // 将 byte 数组转换为字符串
                 String responseString = new String(responseBody);
-                Log.d("order",responseString);
                 try {
                     // 解析字符串为 JSON 对象
                     JSONObject jsonResponse = new JSONObject(responseString);
@@ -160,6 +238,60 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     String message = jsonResponse.getString("message");
                     // 在 Toast 中显示成功或失败消息
                     Toast.makeText(ProductDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(ProductDetailsActivity.this, "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(ProductDetailsActivity.this, "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadCommentData(){
+        commentList=new ArrayList<>();
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("productId",this.id);
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.post(getCommentUrl, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    if(jsonResponse.has("data")){
+                        JSONArray dataArray=jsonResponse.getJSONArray("data");
+                        for(int i=0;i<dataArray.length();i++){
+                            JSONObject item=dataArray.getJSONObject(i);
+                            int id=item.getInt("id");
+                            String username=item.getString("username");
+                            String content=item.getString("content");
+                            String issueTime=item.getString("issueTime");
+                            int deleteState=item.getInt("deleteState");
+                            int isOwner=item.getInt("isOwner");
+                            Comment comment=new Comment(id,username,content,issueTime,deleteState,isOwner);
+                            commentList.add(comment);
+                        }
+                        // 数据加载完成后初始化适配器并设置给 recyclerViewProducts
+                        ProductCommentAdapter productCommentAdapter = new ProductCommentAdapter(commentList,ProductDetailsActivity.this);
+                        // Set up GridLayoutManager with spanCount 1
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(ProductDetailsActivity.this, 1);
+                        int verticalSpacingInPixels = 10;
+                        recyclerViewComments.addItemDecoration(new VerticalSpaceItemDecoration(verticalSpacingInPixels));
+                        recyclerViewComments.setLayoutManager(gridLayoutManager);
+                        recyclerViewComments.setAdapter(productCommentAdapter);
+                    }
+                    else{
+                        String message = jsonResponse.getString("message");
+                        // 在 Toast 中显示成功消息
+                        Toast.makeText(ProductDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // JSON 解析失败，可以在这里处理异常

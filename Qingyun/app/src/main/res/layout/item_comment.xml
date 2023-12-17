@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:background="@drawable/rounded_border">
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginStart="10dp"
+        android:text="用户名："
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewCommentContent"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="14sp"
+        android:layout_marginStart="10dp"
+        android:paddingLeft="20dp"
+        android:text="评论内容"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <TextView
+            android:id="@+id/textViewCommentTime"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:textSize="14sp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="30dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="2023-12-17 02:13:18"
+            android:textColor="@color/black"/>
+
+        <Button
+            android:id="@+id/buttonDeleteComment"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="8sp"
+            android:text="删除评论"
+            android:layout_marginEnd="30dp"/>
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

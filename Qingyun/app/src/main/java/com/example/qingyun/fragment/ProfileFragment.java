@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.qingyun.R;
+import com.example.qingyun.activity.BrowserActivity;
 import com.example.qingyun.activity.CollectActivity;
+import com.example.qingyun.activity.CommentActivity;
 import com.example.qingyun.activity.LoginActivity;
 import com.example.qingyun.activity.OrderActivity;
 import com.example.qingyun.activity.PublishActivity;
@@ -57,6 +60,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String getIssueNumUrl=AppConfig.BaseUrl+"/getIssueNum.php";
     private static final String getSoldNumUrl=AppConfig.BaseUrl+"/getSoldNum.php";
     private static final String getOrderNumUrl=AppConfig.BaseUrl+"/getOrderNum.php";
+    private static final String getCommentNumUrl=AppConfig.BaseUrl+"/getCommentNum.php";
+    private static final String getBrowserNumUrl=AppConfig.BaseUrl+"/getBrowserNum.php";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -120,6 +125,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         initIssueDisplay();
         initSoldDisplay();
         initOrderDisplay();
+        initCommentDisplay();
+        initBrowserDisplay();
         return view;
     }
 
@@ -285,10 +292,69 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 // 将 byte 数组转换为字符串
                 String responseString = new String(responseBody);
+                Log.d("order",responseString);
                 try {
                     JSONObject jsonResponse = new JSONObject(responseString);
                     int num=jsonResponse.getInt("data");
                     order.setText(num+"\n我购买的");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initCommentDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getCommentNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    comment.setText(num+"\n我的评论");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // JSON 解析失败，可以在这里处理异常
+                    Toast.makeText(getActivity(), "JSON 解析失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getActivity(), "网络连接失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initBrowserDisplay(){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        String myCookie = loadCookieFromSharedPreferences();
+        asyncHttpClient.addHeader("Cookie", myCookie);
+        asyncHttpClient.get(getBrowserNumUrl, requestParams, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // 将 byte 数组转换为字符串
+                String responseString = new String(responseBody);
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseString);
+                    int num=jsonResponse.getInt("data");
+                    browser.setText(num+"\n历史浏览");
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // JSON 解析失败，可以在这里处理异常
@@ -318,9 +384,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
            Intent intent = new Intent(requireContext(), CollectActivity.class);
            startActivity(intent);
        } else if (viewId==R.id.browser) {//浏览
-
+           Intent intent = new Intent(requireContext(), BrowserActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.comment) {//评论
-
+           Intent intent = new Intent(requireContext(), CommentActivity.class);
+           startActivity(intent);
        } else if (viewId==R.id.issue) {//发布
            Intent intent = new Intent(requireContext(), PublishActivity.class);
            startActivity(intent);

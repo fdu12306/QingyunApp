@@ -73,9 +73,8 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
         imageViewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start the new Activity or Fragment to show product details
                 Intent intent = new Intent(context, ProductDetailsActivity.class);
-                intent.putExtra("productId", product.getId()); // Pass the product ID or other necessary information
+                intent.putExtra("productId", product.getId());
                 context.startActivity(intent);
             }
         });
