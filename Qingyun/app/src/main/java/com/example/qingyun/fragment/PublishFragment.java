@@ -191,14 +191,14 @@ public class PublishFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(getActivity(), "请输入您意向的价格", Toast.LENGTH_SHORT).show();
             }
             else {
-                // 将selectedImageUri中的图片数据转换为字节数组
-                byte[] imageBytes = getImageBytesFromUri(selectedImageUri);
                 RequestParams requestParams = new RequestParams();
                 requestParams.put("productName",productName);
                 requestParams.put("description",description);
                 requestParams.put("campus",selectedCampus);
                 requestParams.put("category",selectedCategory);
                 requestParams.put("price",price);
+                // 将selectedImageUri中的图片数据转换为字节数组
+                byte[] imageBytes = getImageBytesFromUri(selectedImageUri);
                 // 添加图片数据到RequestParams
                 requestParams.put("image", new ByteArrayInputStream(imageBytes), "image.jpg");
 

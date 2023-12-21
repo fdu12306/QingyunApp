@@ -141,7 +141,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                 .placeholder(R.drawable.placeholder_image)
                                 .error(R.drawable.error_image)
                                 .into(imageViewProduct);
-
                         textViewProductName.setText("商品名称："+productName);
                         textViewCampus.setText("校区：" + campus);
                         textViewCategory.setText("商品类别：" + category);

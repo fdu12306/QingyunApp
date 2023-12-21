@@ -47,7 +47,6 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
     @Override
     public void onBindViewHolder(@NonNull ProductCommentAdapter.ViewHolder holder, int position) {
         Comment comment=commentList.get(position);
-
         holder.textViewUserName.setText(comment.getUsername()+"：");
         if(comment.getDeleteState()==1){
             holder.textViewCommentContent.setText("此评论已删除！");
